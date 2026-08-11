@@ -50,6 +50,22 @@ Niemals `*`.
 
 ## Test
 
+**Lebenszeichen zuerst** — beantwortet die Frage, ob nginx, PHP-FPM und
+die Konfiguration überhaupt zusammenspielen:
+
+```bash
+curl -i https://deine-domain.de/api/health.php
+```
+
+Öffentlich gibt es nur `{"ok":true,"service":"bib-loadingscreen-api"}`
+zurück. Steht in der `config.php` `'debug' => true`, kommt eine
+Diagnose dazu: PHP-Version, ob `pdo_mysql` und `curl` geladen sind, ob
+das Cacheverzeichnis beschreibbar ist, ob die Datenbank antwortet und
+ob `pd_characters` lesbar ist. **Im Betrieb debug wieder auf `false`** —
+sonst erfährt jeder Fremde, ob deine Datenbank gerade läuft.
+
+Dann der eigentliche Endpoint:
+
 ```bash
 curl "https://deine-domain.de/api/player.php?steamid=76561198000000000"
 ```
