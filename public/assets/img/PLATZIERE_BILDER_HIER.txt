@@ -1,0 +1,50 @@
+BILD-ASSETS
+===========
+
+Der Screen laeuft komplett ohne Bilddateien — Helm und Zahnrad sind
+Inline-SVG und kosten keinen einzigen zusaetzlichen Request.
+Diese Dateien sind optional.
+
+
+1) DISCORD-QR-CODE          ->  assets/img/discord-qr.png
+   -------------------------------------------------------
+   Empfohlen: 300x300 px, PNG, SCHWARZ AUF WEISS.
+   Kein transparenter Hintergrund — der Code wird sonst auf dem
+   dunklen Panel unlesbar.
+
+   Eintragen in js/config.js:
+       discord: { label: "discord.gg/deinlink",
+                  qr:    "assets/img/discord-qr.png" }
+
+
+2) EIGENES WAPPEN / LOGO    ->  assets/img/logo.png
+   -------------------------------------------------------
+   Falls du den Inline-Helm durch euer echtes Kompaniewappen
+   ersetzen willst: in index.html die Zeile
+
+       <div class="brand-crest"><svg ...><use href="#helmet"></use></svg></div>
+
+   ersetzen durch
+
+       <div class="brand-crest"><img src="assets/img/logo.png" alt=""></div>
+
+   Empfohlen: PNG mit Transparenz, 256x256 px, unter 40 KB.
+
+
+3) HINTERGRUNDBILD          ->  assets/img/bg.jpg
+   -------------------------------------------------------
+   Optional statt des animierten Sternenfelds. In css/style.css
+   bei  .bg-void  ergaenzen:
+
+       background-image: url("../assets/img/bg.jpg");
+       background-size: cover;
+       background-position: center;
+
+   Empfohlen: 1920x1080, JPG, unter 300 KB. Dunkel halten, sonst
+   ist der Text darauf nicht lesbar.
+
+
+GROESSENBUDGET
+--------------
+Alles zusammen sollte unter 1 MB bleiben. Der Screen konkurriert mit
+dem Content-Download des Spielers um dessen Bandbreite.

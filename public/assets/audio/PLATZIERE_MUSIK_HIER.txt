@@ -1,0 +1,47 @@
+MUSIK-ASSETS
+============
+
+Lege deine Musikdateien in diesen Ordner und trage sie danach in
+js/config.js unter  audio.tracks  ein:
+
+    tracks: [
+      { title: "Vode An",       artist: "Jesse Harlin", src: "assets/audio/track01.mp3" },
+      { title: "Clone Anthem",  artist: "—",            src: "assets/audio/track02.mp3" }
+    ]
+
+
+FORMAT
+------
+  Format:   MP3  (von Chromium sicher unterstuetzt; OGG geht auch)
+  Bitrate:  128-160 kbps reichen voellig
+  Kanaele:  Mono ist fuer Ambient-Musik ausreichend und halbiert die Groesse
+  Laenge:   2-4 Minuten pro Titel
+
+GROESSE IST WICHTIG
+-------------------
+Die Musik laedt parallel zu den Serverinhalten des Spielers und
+konkurriert mit ihnen um dessen Leitung. Richtwert: die Summe aller
+Titel sollte 4 MB nicht ueberschreiten. Lieber zwei kurze Loops als
+ein 12-MB-Orchesterstueck.
+
+AUTOPLAY
+--------
+Chromium blockiert automatische Wiedergabe ohne Nutzerinteraktion.
+Wenn das passiert, blendet der Screen unten rechts den Hinweis
+"Klicken, um Musik zu aktivieren" ein — ein Klick irgendwo auf die
+Seite startet die Wiedergabe.
+
+Der Screen ist so gebaut, dass er ohne Ton vollstaendig funktioniert.
+Verlasse dich nicht darauf, dass die Musik laeuft.
+
+LAUTSTAERKE
+-----------
+GMod uebergibt die Spiellautstaerke des Clients an die Seite. Sie wird
+automatisch mit  audio.baseVolume  aus der config.js multipliziert.
+Wer sein Spiel leise gestellt hat, wird also nicht angeschrien.
+
+RECHTE
+------
+Achte auf die Lizenz. Original-Soundtracks aus Filmen oder Spielen sind
+urheberrechtlich geschuetzt. Fuer einen oeffentlichen Server ist
+lizenzfreie oder selbst produzierte Musik die sichere Wahl.

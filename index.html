@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brothers in Blue — 501st Roleplay</title>
+</head>
+<body>
+
+<!-- ============ HINTERGRUND-EBENEN ============ -->
+<div class="bg-void"></div>
+<div class="bg-stars s1"></div>
+<div class="bg-stars s2"></div>
+<div class="bg-stars s3"></div>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="bg-vignette"></div>
+<div class="scanlines"></div>
+
+<!-- Grosses Wappen als Wasserzeichen im Hintergrund -->
+<div class="watermark" aria-hidden="true">
+  <svg viewBox="0 0 100 122"><use href="#helmet"></use></svg>
+</div>
+
+<!-- ============ SVG-DEFINITIONEN ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Stilisierter Clone-Helm (Phase II), frontal -->
+    <g id="helmet">
+      <path class="h-shell" d="M50 3C28 3 15.5 19 14.2 42.5L12.1 68.5C11.2 83 17.6 96.8 28.4 105.2 34.8 110.2 42.3 113.5 50 113.5s14.9-3.3 21.3-8.3C82.1 96.8 88.5 83 87.6 68.5L85.5 42.5C84.2 19 71.7 3 50 3Z"/>
+      <path class="h-visor" d="M24.5 40.5C24.5 40.5 33 34.5 50 34.5s25.5 6 25.5 6l-3.2 13.8-13.9 2.2-3.6 26.5h-9.6l-3.6-26.5-13.9-2.2Z"/>
+      <path class="h-mark" d="M47.2 3.4h5.6l1.5 27.5h-8.6Z"/>
+      <path class="h-mark" d="M22.6 27.8c4.4-4.3 9.5-7.3 15.2-8.9l2 7.2c-4.5 1.3-8.6 3.7-12.1 7.1Z"/>
+      <path class="h-mark" d="M77.4 27.8c-4.4-4.3-9.5-7.3-15.2-8.9l-2 7.2c4.5 1.3 8.6 3.7 12.1 7.1Z"/>
+      <rect class="h-vent" x="38.5" y="90" width="23" height="3.2" rx="1.6"/>
+      <rect class="h-vent" x="41" y="96.5" width="18" height="3.2" rx="1.6"/>
+      <path class="h-line" d="M14.6 60h12M73.4 60h12"/>
+    </g>
+
+    <!-- Republik-Zahnrad, vereinfacht -->
+    <g id="cog">
+      <circle class="c-ring" cx="50" cy="50" r="42"/>
+      <circle class="c-ring" cx="50" cy="50" r="30"/>
+      <circle class="c-core" cx="50" cy="50" r="12"/>
+      <path class="c-spoke" d="M50 8V20M50 80V92M8 50H20M80 50H92
+                               M20.4 20.4l8.5 8.5M71.1 71.1l8.5 8.5
+                               M79.6 20.4l-8.5 8.5M28.9 71.1l-8.5 8.5"/>
+    </g>
+  </defs>
+</svg>
+
+<!-- ============ BUEHNE ============ -->
+<div class="stage">
+
+  <!-- ---------- KOPFZEILE ---------- -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-crest">
+        <svg viewBox="0 0 100 122"><use href="#helmet"></use></svg>
+      </div>
+      <div class="brand-text">
+        <h1 id="brand-name">BROTHERS IN BLUE</h1>
+        <p id="brand-sub">501<sup>st</sup> ROLEPLAY · TORRENT COMPANY</p>
+      </div>
+    </div>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab is-active" data-view="briefing">
+        <span class="tab-idx">01</span> Einsatzbriefing
+      </button>
+      <button class="tab" data-view="structure">
+        <span class="tab-idx">02</span> Kompaniestruktur
+      </button>
+      <div class="tab-marker" id="tab-marker"></div>
+    </nav>
+
+    <div class="hud-stats">
+      <div class="hstat"><b id="stat-map">—</b><label>Sektor</label></div>
+      <div class="hstat"><b id="stat-slots">—</b><label>Slots</label></div>
+      <div class="hstat"><b id="stat-clock">—</b><label>Lokalzeit</label></div>
+    </div>
+  </header>
+
+  <!-- ---------- VIEWS ---------- -->
+  <main class="views">
+
+    <!-- ========== VIEW 1: EINSATZBRIEFING ========== -->
+    <section class="view is-active" id="view-briefing">
+
+      <!-- Begruessungsbanner -->
+      <div class="panel welcome" id="welcome">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+
+        <div class="welcome-id">
+          <div class="avatar" id="avatar">
+            <svg viewBox="0 0 100 122"><use href="#helmet"></use></svg>
+          </div>
+          <div class="id-chip" id="id-chip">CT-<span id="id-num">0000</span></div>
+        </div>
+
+        <div class="welcome-body">
+          <div class="eyebrow">Eingehende Transmission · Priorität <b>ALPHA</b></div>
+          <h2 id="welcome-line">Willkommen zurück, Trooper.</h2>
+          <p id="welcome-text" class="lede">
+            Du verbindest dich mit <b id="wt-server">Brothers in Blue</b>. Bleib im Kanal,
+            während deine Ausrüstungsdaten synchronisiert werden.
+          </p>
+
+          <!-- Diese Felder fuellt spaeter dein Backend (Stufe 3). Ohne Backend werden sie ausgeblendet. -->
+          <div class="dossier" id="dossier" hidden>
+            <div class="dfield"><label>Einheit</label><b data-slot="unit">—</b></div>
+            <div class="dfield"><label>Rang</label><b data-slot="rank">—</b></div>
+            <div class="dfield"><label>Zug</label><b data-slot="platoon">—</b></div>
+            <div class="dfield"><label>Dienstzeit</label><b data-slot="playtime">—</b></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kartenreihe -->
+      <div class="cards">
+
+        <article class="panel card" id="card-rules">
+          <div class="corner tl"></div><div class="corner br"></div>
+          <header class="card-head">
+            <span class="card-num">§</span>
+            <h3>Dienstvorschrift</h3>
+          </header>
+          <ol class="rules" id="rules-list"></ol>
+        </article>
+
+        <article class="panel card" id="card-tips">
+          <div class="corner tl"></div><div class="corner br"></div>
+          <header class="card-head">
+            <span class="card-num">!</span>
+            <h3>Feldhinweis</h3>
+          </header>
+          <div class="tip" id="tip-box">
+            <p id="tip-text">—</p>
+          </div>
+          <div class="tip-dots" id="tip-dots"></div>
+        </article>
+
+        <article class="panel card" id="card-net">
+          <div class="corner tl"></div><div class="corner br"></div>
+          <header class="card-head">
+            <span class="card-num">#</span>
+            <h3>Funknetz &amp; Änderungen</h3>
+          </header>
+
+          <div class="discord">
+            <div class="qr" id="qr-slot" title="QR-Code hier einsetzen">
+              <span>QR</span>
+            </div>
+            <div class="discord-txt">
+              <label>Kompanie-Funk</label>
+              <b id="discord-link">discord.gg/deinlink</b>
+              <small>Im Spiel nicht klickbar — bitte abtippen oder scannen.</small>
+            </div>
+          </div>
+
+          <div class="changelog">
+            <label>Letzte Änderungen</label>
+            <ul id="changelog-list"></ul>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ========== VIEW 2: KOMPANIESTRUKTUR ========== -->
+    <section class="view" id="view-structure">
+
+      <div class="struct-intro">
+        <h2>Gliederung der <b>Torrent Company</b></h2>
+        <p>Vier Züge, eine Kompanie. Jeder Zug erfüllt eine eigene Rolle im Gefecht —
+           zusammen decken sie das gesamte Einsatzspektrum der 501st ab.</p>
+      </div>
+
+      <!-- Kompaniefuehrung -->
+      <div class="org">
+        <div class="org-hq">
+          <div class="panel hq-node">
+            <div class="corner tl"></div><div class="corner tr"></div>
+            <div class="corner bl"></div><div class="corner br"></div>
+            <div class="hq-crest"><svg viewBox="0 0 100 100"><use href="#cog"></use></svg></div>
+            <div class="hq-text">
+              <span class="hq-abbr">TC</span>
+              <h3>Torrent Company</h3>
+              <p>Kompanieführung · Befehlsgewalt über alle vier Züge</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verbindungslinien -->
+        <div class="org-connector">
+          <div class="conn-stem"></div>
+          <div class="conn-rail"></div>
+          <div class="conn-drops" id="conn-drops"></div>
+        </div>
+
+        <!-- Die vier Zuege -->
+        <div class="org-platoons" id="platoons"></div>
+      </div>
+
+      <div class="struct-foot">
+        <div class="legend-item"><span class="dot" style="--c:var(--lip)"></span> Leichte Infanterie</div>
+        <div class="legend-item"><span class="dot" style="--c:var(--hip)"></span> Schwere Infanterie</div>
+        <div class="legend-item"><span class="dot" style="--c:var(--med)"></span> Sanitätsdienst</div>
+        <div class="legend-item"><span class="dot" style="--c:var(--eng)"></span> Pioniere</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ---------- FUSSLEISTE: FORTSCHRITT + AUDIO ---------- -->
+  <footer class="dock">
+
+    <div class="dock-progress">
+      <div class="prog-head">
+        <span class="prog-status" id="status">Verbindung wird hergestellt…</span>
+        <span class="prog-pct" id="pct">0<i>%</i></span>
+      </div>
+      <div class="bar" id="bar">
+        <div class="bar-fill" id="bar-fill"></div>
+        <div class="bar-scan"></div>
+      </div>
+      <div class="prog-foot">
+        <span class="prog-file" id="file">Warte auf Serverantwort…</span>
+        <span class="prog-count" id="files-count"></span>
+      </div>
+    </div>
+
+    <div class="dock-audio" id="audio-dock">
+      <button class="audio-btn" id="audio-toggle" title="Musik an/aus">
+        <svg viewBox="0 0 24 24" class="ico-on"><path d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+        <svg viewBox="0 0 24 24" class="ico-off"><path d="M4 9v6h4l5 4V5L8 9H4zm15 .5-1.4-1.4L15 10.6l-2.6-2.5L11 9.5l2.6 2.5L11 14.6l1.4 1.4 2.6-2.6 2.6 2.6 1.4-1.4-2.6-2.6z"/></svg>
+      </button>
+      <div class="audio-meta">
+        <span class="audio-label" id="audio-label">Musik</span>
+        <span class="audio-track" id="track-title">—</span>
+      </div>
+      <input type="range" id="volume" class="vol" min="0" max="100" value="35" title="Lautstärke">
+    </div>
+
+  </footer>
+</div>
+
+<!-- Hinweis, falls der Browser Autoplay blockiert -->
+<div class="audio-nudge" id="audio-nudge" hidden>Klicken, um Musik zu aktivieren</div>
+
+<audio id="player" preload="none"></audio>
+
+<!-- Bleibt bewusst UNGEBUNDELT und liegt in public/.
+     Dadurch kannst du Texte, Regeln und Musik nach dem Build direkt
+     auf dem Webserver in dist/config.js aendern, ohne neu zu bauen.
+     Klassisches <script> ohne type=module: laeuft garantiert vor main.js. -->
+<script src="/config.js"></script>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

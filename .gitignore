@@ -1,0 +1,22 @@
+node_modules/
+dist/
+
+# Musik- und Bilddateien werden nicht versioniert.
+# Sie sind gross, binaer und meistens lizenzbehaftet.
+# Die Platzhalter-Anleitungen bleiben erhalten.
+public/assets/audio/*
+public/assets/img/*
+!public/assets/audio/*.txt
+!public/assets/img/*.txt
+!public/assets/**/.gitkeep
+
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+.vite/
+.env
+.env.local
+.idea/
+.vscode/*
+!.vscode/extensions.json

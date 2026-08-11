@@ -1,0 +1,15 @@
+{
+  "name": "bib-loadingscreen",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Loading Screen für den Garry's Mod Server \"Brothers in Blue — 501st Roleplay\"",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.1.5"
+  }
+}
