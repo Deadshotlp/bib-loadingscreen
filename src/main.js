@@ -18,6 +18,7 @@ var state = {
   filesTotal:   0,
   filesNeeded:  0,
   haveTotals:   false,
+  transferDone: false,   // true, sobald GMod die Lua-Ladephase meldet
   gmodSeen:     false,   // true, sobald GMod irgendeinen Callback gefeuert hat
   steamid:      null,
   view:         "briefing",
@@ -226,6 +227,16 @@ function renderProgress() {
   var pct  = $("pct");
   var cnt  = $("files-count");
 
+  /* Transfer durch, aber nie Dateizahlen bekommen -> voll statt
+     endlos wandernder Balken. */
+  if (state.transferDone && (!state.haveTotals || state.filesTotal <= 0)) {
+    bar.classList.remove("indeterminate");
+    fill.style.width = "100%";
+    pct.innerHTML = "100<i>%</i>";
+    cnt.textContent = "";
+    return;
+  }
+
   if (!state.haveTotals || state.filesTotal <= 0) {
     bar.classList.add("indeterminate");
     pct.innerHTML = "--<i>%</i>";
@@ -348,6 +359,19 @@ window.DownloadingFile = function (fileName) {
 
 window.SetStatusChanged = function (status) {
   fromGMod();
+
+  /* "Starting Lua..." bedeutet: der Dateitransfer ist abgeschlossen.
+     GMod ruft SetFilesNeeded(0) nicht verlaesslich auf — ohne diesen
+     Abgleich stuende der Balken waehrend der laengsten Ladephase
+     weiter bei 0%. */
+  if (status && /lua/i.test(String(status))) {
+    if (state.haveTotals) {
+      state.filesNeeded = 0;
+    }
+    state.transferDone = true;
+    renderProgress();
+  }
+
   setStatus(status);
 };
 
