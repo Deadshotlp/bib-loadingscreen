@@ -19,6 +19,20 @@ export default defineConfig({
        den Code sicher ausfuehren. */
     target: "es2018",
 
+    /* WICHTIG — nicht erhoehen.
+       Der CSS-Minifier fasst Deklarationen zu modernen Kurzformen
+       zusammen, wenn das Ziel sie unterstuetzt. Aus
+       top/right/bottom/left wird dann wieder 'inset', und genau das
+       kennt die CEF-Version im GMod-Client nicht: die Deklaration
+       wird verworfen, Hintergrundebenen werden 0x0 gross und das
+       Layout faellt zusammen.
+
+       'inset' gibt es ab Chrome 87 — mit chrome69 als Ziel laesst der
+       Minifier die Langschreibweise in Ruhe. Ohne diese Zeile ist der
+       Fix in der style.css wirkungslos, weil er erst beim Build
+       rueckgaengig gemacht wird. */
+    cssTarget: "chrome69",
+
     /* Alles in je eine JS- und CSS-Datei — weniger Requests beim Laden. */
     cssCodeSplit: false,
     rollupOptions: {
