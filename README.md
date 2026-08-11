@@ -190,10 +190,16 @@ parallel zu den Serverinhalten und konkurriert um dieselbe Leitung.
 Dann erscheint das Dossier im Begrüßungsbanner. Ohne Endpoint bleibt es
 ausgeblendet, alles andere funktioniert normal.
 
+**Das Backend liegt fertig bei** — siehe [api/](api/) und
+[api/README.md](api/README.md). Reines PHP, keine Composer-Abhängigkeiten,
+liest `pd_characters` direkt aus eurer Gamemode-Datenbank.
+
 > **Sicherheit:** Das Endpoint ist öffentlich und bekommt eine SteamID als
-> Parameter — die ist trivial fälschbar. Nur unkritische Anzeigedaten
-> ausgeben. Keine IPs, keine Adminnotizen, keine Ban-Gründe. Rate-Limit
-> einbauen.
+> Parameter — die ist trivial fälschbar. Es gibt deshalb nur Anzeigedaten
+> aus, die ohnehin jeder Mitspieler im Spiel sieht. Keine IPs, keine
+> Adminnotizen, keine Ban-Gründe, kein Geld. Drosselung pro IP ist
+> eingebaut, die Datenbank wird ausschließlich mit Prepared Statements
+> und einem Nur-Lese-Benutzer angesprochen.
 
 ---
 

@@ -205,6 +205,9 @@ window.BIB_CONFIG = {
        "playtime": "142 h",
        "returning": true
      }
+
+     Das passende Backend liegt fertig in  api/  — siehe api/README.md.
+     Nach dessen Einrichtung hier die URL eintragen.
      --------------------------------------------------------------- */
   api: {
     // z.B. "https://deine-domain.de/api/player.php"

@@ -1,0 +1,19 @@
+# Brothers in Blue — Loading Screen API
+# Schutz fuer Apache. Bei nginx greift das NICHT — dort die Regeln
+# aus api/README.md in den Serverblock uebernehmen.
+
+# Zugangsdaten und Hilfsdateien nie ausliefern
+<FilesMatch "^(config\.php|config\.example\.php|lib\.php)$">
+    Require all denied
+</FilesMatch>
+
+# Cacheverzeichnis komplett sperren
+RedirectMatch 404 ^/.*/api/cache/.*$
+
+# Kein Verzeichnislisting
+Options -Indexes
+
+# Nur GET und OPTIONS
+<LimitExcept GET OPTIONS>
+    Require all denied
+</LimitExcept>

@@ -1,6 +1,11 @@
 node_modules/
 dist/
 
+# API-Zugangsdaten und Laufzeitdaten — NIEMALS versionieren.
+# config.example.php bleibt als Vorlage im Repo.
+api/config.php
+api/cache/
+
 # Musik- und Bilddateien werden nicht versioniert.
 # Sie sind gross, binaer und meistens lizenzbehaftet.
 # Die Platzhalter-Anleitungen bleiben erhalten.
