@@ -96,9 +96,22 @@ den letzten `location /`-Block durch:
 ```
 
 **Alles zu `/api/` bleibt unverändert stehen**, ebenso `root /var/www/loading;`
-— sonst findet PHP-FPM seine Skripte nicht. Die `/bundle/`- und
-`/config.js`-Blöcke kannst du entfernen, um die passenden Cache-Header
-kümmert sich jetzt `server.cjs`.
+— sonst findet PHP-FPM seine Skripte nicht.
+
+> ⚠️ **Die Blöcke `location /bundle/` und `location = /config.js` müssen
+> gelöscht werden** — auch im HTTPS-Block, den certbot angelegt hat.
+>
+> Sie enthalten kein `proxy_pass`, nginx bedient sie deshalb weiterhin aus
+> `root /var/www/loading`. Dort liegen die Dateien nach der Umstellung
+> nicht mehr: CSS, JavaScript und `config.js` geben 404 zurück, während
+> `/` sauber zum Container geht. Das Ergebnis ist eine unformatierte
+> Seite — schwarze SVG-Formen auf leerem Grund, ohne jede Fehlermeldung
+> im Browser.
+>
+> Erkennungszeichen im Container-Log: es kommen ausschließlich
+> `GET /`-Zeilen an, nie `GET /bundle/…`.
+>
+> Um die Cache-Header kümmert sich `server.cjs` selbst.
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
