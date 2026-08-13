@@ -1,0 +1,73 @@
+{
+    "_comment": "Brothers in Blue - 501st Roleplay | Loading Screen. Liefert den gebauten Vite-Screen ueber einen abhaengigkeitsfreien Node-Server aus. Die PHP-API unter /api/ laeuft NICHT in diesem Container - die bleibt bei nginx und PHP-FPM.",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-08-11T21:00:00+00:00",
+    "name": "BiB Loading Screen",
+    "author": "gamemasterlp@aol.com",
+    "description": "Garry's-Mod-Ladebildschirm fuer Brothers in Blue (501st Roleplay). Statischer Node-Server ohne Laufzeitabhaengigkeiten. Das Repository wird bei der Installation geklont und mit Vite gebaut.",
+    "features": null,
+    "docker_images": {
+        "Node.js 22": "ghcr.io\/pelican-eggs\/yolks:nodejs_22",
+        "Node.js 20": "ghcr.io\/pelican-eggs\/yolks:nodejs_20"
+    },
+    "file_denylist": [],
+    "startup": "node \/home\/container\/server.cjs",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Loading Screen bereit\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n# ---------------------------------------------------------------\r\n# Brothers in Blue - Loading Screen | Installationsskript\r\n#\r\n# Laeuft als root in einem separaten Container.\r\n# Zielverzeichnis ist \/mnt\/server, das spaeter \/home\/container wird.\r\n# ---------------------------------------------------------------\r\nset -e\r\n\r\necho \"[BIB] Installation startet\"\r\n\r\napt-get update -y\r\napt-get install -y --no-install-recommends git ca-certificates\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/tmp\r\nrm -rf src\r\n\r\nif [ -z \"${GIT_REPO}\" ]; then\r\n    echo \"[BIB] FEHLER: GIT_REPO ist leer.\"\r\n    echo \"[BIB] Trage die Repository-URL in den Server-Variablen ein,\"\r\n    echo \"[BIB] oder lade den Inhalt von dist\/ und server.cjs manuell\"\r\n    echo \"[BIB] ueber den Dateimanager hoch.\"\r\n    exit 1\r\nfi\r\n\r\n# Privates Repository: Token in die URL einsetzen, ohne es zu loggen.\r\nCLONE_URL=\"${GIT_REPO}\"\r\nif [ -n \"${GIT_TOKEN}\" ]; then\r\n    CLONE_URL=\"https:\/\/${GIT_TOKEN}@${GIT_REPO#https:\/\/}\"\r\n    echo \"[BIB] Klone privates Repository (Token gesetzt)\"\r\nelse\r\n    echo \"[BIB] Klone oeffentliches Repository\"\r\nfi\r\n\r\nif ! git clone --depth 1 -b \"${GIT_BRANCH}\" \"${CLONE_URL}\" src 2>\/tmp\/giterr; then\r\n    echo \"[BIB] FEHLER: git clone fehlgeschlagen.\"\r\n    sed \"s|${GIT_TOKEN}|***|g\" \/tmp\/giterr || true\r\n    echo \"[BIB] Bei privaten Repositories GIT_TOKEN setzen (Scope: repo, nur lesend).\"\r\n    exit 1\r\nfi\r\n\r\ncd src\r\n\r\necho \"[BIB] Node: $(node -v)  npm: $(npm -v)\"\r\necho \"[BIB] Installiere Abhaengigkeiten\"\r\nnpm ci --no-audit --no-fund\r\n\r\necho \"[BIB] Baue Produktionsstand\"\r\nnpm run build\r\n\r\nif [ ! -f dist\/index.html ]; then\r\n    echo \"[BIB] FEHLER: dist\/index.html fehlt - der Build lief nicht durch.\"\r\n    exit 1\r\nfi\r\n\r\necho \"[BIB] Kopiere Ergebnis nach \/mnt\/server\"\r\nrm -rf \/mnt\/server\/dist\r\nmkdir -p \/mnt\/server\/dist\r\ncp -r dist\/. \/mnt\/server\/dist\/\r\ncp pelican\/server.cjs \/mnt\/server\/server.cjs\r\n\r\n# Kurzer Hinweis fuer den Dateimanager\r\ncat > \/mnt\/server\/LIESMICH.txt <<'EOF'\r\nBrothers in Blue - Loading Screen\r\n\r\ndist\/        ausgelieferte Dateien (aus dem Build)\r\ndist\/config.js   Regeln, Tipps, Zugbeschreibungen, Discord, Musik\r\n                 -> darf hier direkt bearbeitet werden, wirkt sofort\r\nserver.cjs   der Webserver, normalerweise nicht anfassen\r\n\r\nAchtung: Bei \"Reinstall\" wird dist\/ komplett neu aus dem Repository\r\ngebaut. Aenderungen an dist\/config.js gehen dabei verloren. Dauerhafte\r\nAenderungen gehoeren in public\/config.js im Repository.\r\nEOF\r\n\r\necho \"[BIB] Installation abgeschlossen\"\r\n",
+            "container": "node:22-bookworm-slim",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Repository",
+            "description": "HTTPS-URL des Loading-Screen-Repositories. Wird bei der Installation geklont und gebaut.",
+            "env_variable": "GIT_REPO",
+            "default_value": "https:\/\/github.com\/Deadshotlp\/bib-loadingscreen.git",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "Branch",
+            "description": "Zu bauender Branch.",
+            "env_variable": "GIT_BRANCH",
+            "default_value": "main",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:64",
+            "field_type": "text"
+        },
+        {
+            "name": "Git Token",
+            "description": "Nur bei privatem Repository noetig. Personal Access Token mit ausschliesslich LESENDEM Zugriff (Scope repo bzw. Fine-grained: Contents Read). Wird im Panel gespeichert und beim Klonen verwendet. Bei oeffentlichem Repository leer lassen.",
+            "env_variable": "GIT_TOKEN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "name": "Verzeichnis",
+            "description": "Welches Verzeichnis ausgeliefert wird. Nur aendern, wenn du die Dateien manuell woanders ablegst.",
+            "env_variable": "SERVE_DIR",
+            "default_value": "\/home\/container\/dist",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "required|string|max:255",
+            "field_type": "text"
+        }
+    ]
+}
