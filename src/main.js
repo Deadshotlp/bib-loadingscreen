@@ -19,6 +19,9 @@ var state = {
   filesNeeded:  0,
   haveTotals:   false,
   transferDone: false,   // true, sobald GMod die Lua-Ladephase meldet
+  downloaded:   0,       // gezaehlte DownloadingFile-Aufrufe
+  progressSeen: false,   // true, sobald sich der Fortschritt echt bewegt hat
+  lastPct:      0,       // fuer monotone Anzeige, damit nichts zurueckspringt
   gmodSeen:     false,   // true, sobald GMod irgendeinen Callback gefeuert hat
   steamid:      null,
   view:         "briefing",
@@ -244,15 +247,40 @@ function renderProgress() {
     return;
   }
 
-  bar.classList.remove("indeterminate");
+  /* Zwei unabhaengige Quellen, weil GMod sich nicht auf eine verlaesst:
 
-  var done = state.filesTotal - state.filesNeeded;
+     a) SetFilesNeeded zaehlt herunter — meldet sich aber nicht immer,
+        etwa wenn der Client die Dateien schon im Cache hat.
+     b) DownloadingFile feuert pro Datei — daraus laesst sich zaehlen.
+
+     Wir nehmen den hoeheren Wert. Faellt eine Quelle aus, traegt die
+     andere. */
+  var doneFromNeeded = state.filesTotal - state.filesNeeded;
+  var done = Math.max(doneFromNeeded, state.downloaded);
+
   if (done < 0) done = 0;
   if (done > state.filesTotal) done = state.filesTotal;
+
+  /* Solange sich ueberhaupt nichts geruehrt hat, ist ein starres 0%
+     eine Luege — wir wissen schlicht nicht, wo wir stehen. Dann lieber
+     der laufende Balken. */
+  if (!state.progressSeen && done <= 0) {
+    bar.classList.add("indeterminate");
+    pct.innerHTML = "--<i>%</i>";
+    cnt.textContent = state.filesTotal.toLocaleString("de-DE") + " Dateien";
+    return;
+  }
+
+  bar.classList.remove("indeterminate");
 
   var p = Math.round((done / state.filesTotal) * 100);
   if (p < 0) p = 0;
   if (p > 100) p = 100;
+
+  /* Nie zurueckspringen — sonst zappelt die Anzeige, wenn beide
+     Quellen unterschiedlich schnell melden. */
+  if (p < state.lastPct) p = state.lastPct;
+  state.lastPct = p;
 
   fill.style.width = p + "%";
   pct.innerHTML = p + "<i>%</i>";
@@ -347,14 +375,23 @@ window.SetFilesNeeded = function (needed) {
   if (!isNaN(n)) {
     state.filesNeeded = n;
     if (n > state.filesTotal) { state.filesTotal = n; state.haveTotals = true; }
+    /* Erst wenn der Zaehler unter das Gesamtergebnis faellt, hat sich
+       wirklich etwas bewegt. Der erste Aufruf meldet oft nur die
+       Gesamtzahl noch einmal. */
+    if (n < state.filesTotal) state.progressSeen = true;
   }
   renderProgress();
 };
 
 window.DownloadingFile = function (fileName) {
   fromGMod();
+  /* Zweite Fortschrittsquelle: pro Datei ein Aufruf. Traegt die
+     Anzeige auch dann, wenn SetFilesNeeded stumm bleibt. */
+  state.downloaded++;
+  state.progressSeen = true;
   setFileName(fileName);
   setStatus("Serverinhalte werden übertragen…");
+  renderProgress();
 };
 
 window.SetStatusChanged = function (status) {
