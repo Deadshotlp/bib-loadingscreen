@@ -22,11 +22,20 @@
   --muted:     #7b8caa;
   --faint:     #4a5a76;
 
-  /* Akzente der Zuege */
-  --lip:       #58a6ff;
-  --hip:       #2f6fd0;
+  /* Akzente der Platoons.
+     Diese Namen werden in public/config.js unter platoons[].color
+     referenziert. Wer dort einen Namen benutzt, der hier fehlt,
+     bekommt eine unsichtbare Badge: var() auf eine undefinierte
+     Variable macht die ganze Deklaration ungueltig, der Hintergrund
+     wird transparent. */
+  --1st:       #58a6ff;
+  --2nd:       #2f6fd0;
   --med:       #e8eefa;
   --eng:       #f0a500;
+
+  /* Altnamen — die Legende in der index.html verweist noch darauf */
+  --lip:       var(--1st);
+  --hip:       var(--2nd);
 
   --line:      rgba(88,166,255,.20);
   --line-str:  rgba(88,166,255,.46);
@@ -170,13 +179,21 @@ html,body{
    BUEHNE / GRUNDRASTER
    ===================================================================== */
 
+/* Die Buehne ist fest 1920x1080 gross und wird als Ganzes auf den
+   Bildschirm skaliert (Faktor --s, gesetzt von fitStage() in der
+   index.html). Dadurch sieht der Screen auf 1080p, 1440p und 4K
+   identisch aus, nur groesser.
+   WICHTIG: innerhalb der Buehne keine vw/vh-Einheiten verwenden,
+   sondern feste px gegen die 1920x1080-Referenz. */
 .stage{
-  position:relative; z-index:10;
-  height:100vh;
+  position:fixed; z-index:10;
+  left:50%; top:50%;
+  width:1920px; height:1080px;
+  transform:translate(-50%,-50%) scale(var(--s,1));
+  transform-origin:center center;
   display:grid;
   grid-template-rows:var(--top-h) 1fr var(--dock-h);
-  padding:0 clamp(16px,3vw,46px);
-  max-width:1720px; margin:0 auto;
+  padding:0 46px;
 }
 
 /* ---------- KOPFZEILE ---------- */
@@ -202,7 +219,7 @@ html,body{
 @keyframes crest-in{ from{ opacity:0; transform:translateY(8px) scale(.9);} to{ opacity:1; transform:none;} }
 
 .brand-text h1{
-  margin:0; font-size:clamp(17px,1.5vw,23px); letter-spacing:.20em;
+  margin:0; font-size:23px; letter-spacing:.20em;
   color:var(--armor); font-weight:700; white-space:nowrap;
   text-shadow:0 0 22px rgba(88,166,255,.35);
 }
@@ -331,7 +348,7 @@ html,body{
 }
 .eyebrow b{ color:var(--eng); }
 .welcome-body h2{
-  margin:0 0 8px; font-size:clamp(20px,2.1vw,30px); color:var(--armor);
+  margin:0 0 8px; font-size:30px; color:var(--armor);
   font-weight:700; letter-spacing:.03em;
 }
 .lede{ margin:0; font-size:14px; line-height:1.62; color:var(--text); max-width:76ch; }
@@ -351,6 +368,9 @@ html,body{
 .cards{
   display:grid; gap:20px; flex:1; min-height:0;
   grid-template-columns:1.15fr .85fr 1fr;
+  /* Ohne diese Zeile wird die Zeilenhoehe nach Inhalt bemessen und
+     der Rest der Flaeche bleibt leer. */
+  grid-template-rows:minmax(0,1fr);
 }
 .card{ padding:20px 22px; display:flex; flex-direction:column; min-height:0; }
 .card:nth-child(1){ animation:rise .5s .12s both; }
@@ -450,7 +470,7 @@ html,body{
 
 .struct-intro{ text-align:center; animation:rise .5s .05s both; }
 .struct-intro h2{
-  margin:0 0 7px; font-size:clamp(19px,2vw,27px); color:var(--armor);
+  margin:0 0 7px; font-size:27px; color:var(--armor);
   letter-spacing:.06em; font-weight:700;
 }
 .struct-intro h2 b{ color:var(--blue-br); }
@@ -464,7 +484,7 @@ html,body{
 .org-hq{ display:flex; justify-content:center; animation:rise .5s .1s both; }
 .hq-node{
   display:flex; align-items:center; gap:18px;
-  padding:16px 30px; min-width:min(430px,86vw);
+  padding:16px 30px; min-width:430px;
   background:linear-gradient(180deg, rgba(47,111,208,.20), var(--panel));
   border-color:var(--line-str);
   box-shadow:0 0 40px rgba(47,111,208,.20);
@@ -504,6 +524,7 @@ html,body{
 /* Die vier Zuege */
 .org-platoons{
   display:grid; grid-template-columns:repeat(4,1fr); gap:18px;
+  grid-template-rows:minmax(0,1fr);
   flex:1; min-height:0;
 }
 .pl-card{
@@ -686,8 +707,10 @@ html,body{
 }
 
 /* Autoplay-Hinweis */
+/* Sitzt jetzt im .dock (siehe index.html) und wird mitskaliert.
+   absolute statt fixed, damit er sich am Fuss der Buehne ausrichtet. */
 .audio-nudge{
-  position:fixed; z-index:60; bottom:118px; right:clamp(16px,3vw,46px);
+  position:absolute; z-index:60; bottom:104px; right:0;
   padding:9px 16px; font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
   color:var(--armor); background:rgba(47,111,208,.92);
   border:1px solid var(--blue-br); box-shadow:0 0 26px -6px var(--blue-glow);
@@ -706,39 +729,20 @@ html,body{
 
 /* =====================================================================
    ANPASSUNG AN KLEINE / SCHMALE AUFLOESUNGEN
+
+   Hier standen vier Media Queries (max-width 1380/1100/820, max-height
+   760). Sie sind entfallen, weil die Buehne jetzt immer 1920x1080 gross
+   ist und stattdessen skaliert wird.
+
+   Media Queries messen den echten Viewport, nicht die Buehne. Auf einem
+   1366er-Laptop haetten sie also das Layout umgebaut, obwohl innen
+   weiterhin 1920px Platz sind — Zweispalter bei voller Breite.
+
+   Falls der Screen einmal auf sehr schmalen Fenstern (Handy, kleines
+   Vorschaufenster) sauber aussehen soll, gehoert das ueber einen
+   zweiten Skalierungsfaktor oder eine eigene Buehnengroesse geloest,
+   nicht ueber Viewport-Queries.
    ===================================================================== */
-
-@media (max-width:1380px){
-  .cards{ grid-template-columns:1fr 1fr; }
-  #card-net{ grid-column:1 / -1; }
-  #card-net .discord{ margin-bottom:12px; }
-}
-
-@media (max-width:1100px){
-  :root{ --top-h:82px; --dock-h:96px; }
-  .hud-stats{ display:none; }
-  .org-platoons{ grid-template-columns:repeat(2,1fr); }
-  .conn-rail,.conn-drops{ display:none; }
-}
-
-@media (max-width:820px){
-  .cards{ grid-template-columns:1fr; }
-  .welcome{ flex-direction:column; text-align:center; }
-  .dossier{ justify-content:center; }
-  .dock{ flex-direction:column; align-items:stretch; gap:14px; }
-  .dock-audio{ padding-left:0; border-left:none; padding-top:12px;
-               border-top:1px solid var(--line); }
-  .org-platoons{ grid-template-columns:1fr; }
-  .brand-text p{ font-size:9.5px; }
-}
-
-@media (max-height:760px){
-  :root{ --top-h:74px; --dock-h:92px; }
-  .welcome{ padding:14px 20px; }
-  .avatar{ width:60px; height:60px; }
-  .card{ padding:15px 17px; }
-  .struct-intro p{ display:none; }
-}
 
 /* Bewegungsreduktion respektieren */
 @media (prefers-reduced-motion:reduce){

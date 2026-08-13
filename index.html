@@ -100,8 +100,8 @@
         </div>
 
         <div class="welcome-body">
-          <div class="eyebrow">Eingehende Transmission · Priorität <b>ALPHA</b></div>
-          <h2 id="welcome-line">Willkommen zurück, Trooper.</h2>
+          <div class="eyebrow">Eingehende Transmission · Priorität <b>Aurek</b></div>
+          <h2 id="welcome-line">Willkommen zurück, Soldat.</h2>
           <p id="welcome-text" class="lede">
             Du verbindest dich mit <b id="wt-server">Brothers in Blue</b>. Bleib im Kanal,
             während deine Ausrüstungsdaten synchronisiert werden.
@@ -111,7 +111,7 @@
           <div class="dossier" id="dossier" hidden>
             <div class="dfield"><label>Einheit</label><b data-slot="unit">—</b></div>
             <div class="dfield"><label>Rang</label><b data-slot="rank">—</b></div>
-            <div class="dfield"><label>Zug</label><b data-slot="platoon">—</b></div>
+            <div class="dfield"><label>Platoon</label><b data-slot="platoon">—</b></div>
             <div class="dfield"><label>Dienstzeit</label><b data-slot="playtime">—</b></div>
           </div>
         </div>
@@ -154,8 +154,8 @@
             </div>
             <div class="discord-txt">
               <label>Kompanie-Funk</label>
-              <b id="discord-link">discord.gg/deinlink</b>
-              <small>Im Spiel nicht klickbar — bitte abtippen oder scannen.</small>
+              <b id="discord-link">https://discord.gg/AUaKGACn34</b>
+              <small>Im Spiel nicht klickbar: bitte abtippen in game fragen.</small>
             </div>
           </div>
 
@@ -173,7 +173,7 @@
 
       <div class="struct-intro">
         <h2>Gliederung der <b>Torrent Company</b></h2>
-        <p>Vier Züge, eine Kompanie. Jeder Zug erfüllt eine eigene Rolle im Gefecht —
+        <p>Vier Platoons, eine Kompanie. Jedes Platoon erfüllt eine eigene Rolle im Gefecht —
            zusammen decken sie das gesamte Einsatzspektrum der 501st ab.</p>
       </div>
 
@@ -187,7 +187,7 @@
             <div class="hq-text">
               <span class="hq-abbr">TC</span>
               <h3>Torrent Company</h3>
-              <p>Kompanieführung · Befehlsgewalt über alle vier Züge</p>
+              <p>Kompanieführung · Befehlsgewalt über alle vier Platoon</p>
             </div>
           </div>
         </div>
@@ -243,13 +243,42 @@
       <input type="range" id="volume" class="vol" min="0" max="100" value="35" title="Lautstärke">
     </div>
 
+    <!-- Hinweis, falls der Browser Autoplay blockiert.
+         Liegt bewusst INNERHALB der Buehne, damit er mitskaliert und
+         buendig ueber der Audioleiste sitzt. -->
+    <div class="audio-nudge" id="audio-nudge" hidden>Klicken, um Musik zu aktivieren</div>
+
   </footer>
 </div>
 
-<!-- Hinweis, falls der Browser Autoplay blockiert -->
-<div class="audio-nudge" id="audio-nudge" hidden>Klicken, um Musik zu aktivieren</div>
-
 <audio id="player" preload="none"></audio>
+
+<!-- Buehnen-Skalierung.
+     Rechnet aus, wie stark die feste 1920x1080-Buehne schrumpfen oder
+     wachsen muss, damit sie komplett auf den Bildschirm passt, und legt
+     das Ergebnis als CSS-Variable --s ab. Bewusst klassisches <script>
+     ohne Modul: laeuft sofort, noch bevor der Screen sichtbar wird. -->
+<script>
+  function fitStage(){
+    var w = window.innerWidth  || document.documentElement.clientWidth  || 0;
+    var h = window.innerHeight || document.documentElement.clientHeight || 0;
+
+    /* Laeuft dieses Skript, bevor der Browser ein Layout hat, sind
+       beide Werte 0. Ein daraus berechnetes --s von 0 skaliert die
+       Buehne auf 0x0 — der Screen waere komplett unsichtbar, und ohne
+       spaeteres resize-Ereignis bliebe es dabei. Also lieber warten. */
+    if (!w || !h) { requestAnimationFrame(fitStage); return; }
+
+    var s = Math.min(w / 1920, h / 1080);
+    if (!(s > 0) || !isFinite(s)) { requestAnimationFrame(fitStage); return; }
+
+    document.documentElement.style.setProperty("--s", s);
+  }
+
+  addEventListener("resize", fitStage);
+  addEventListener("load", fitStage);
+  fitStage();
+</script>
 
 <!-- Bleibt bewusst UNGEBUNDELT und liegt in public/.
      Dadurch kannst du Texte, Regeln und Musik nach dem Build direkt

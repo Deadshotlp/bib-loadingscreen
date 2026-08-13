@@ -17,6 +17,8 @@ public/assets/img/*
 
 .DS_Store
 Thumbs.db
+.Rhistory
+.Rproj.user/
 *.log
 npm-debug.log*
 .vite/

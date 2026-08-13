@@ -22,7 +22,7 @@ window.BIB_CONFIG = {
      FUNKNETZ
      --------------------------------------------------------------- */
   discord: {
-    label: "discord.gg/deinlink",     // <- eintragen
+    label: "https://discord.gg/AUaKGACn34",     // <- eintragen
     // QR-Code als Bilddatei (empfohlen: 300x300 PNG, schwarz auf weiss).
     // Leer lassen -> es wird ein Platzhalter angezeigt.
     qr: ""                            // z.B. "assets/img/discord-qr.png"
@@ -33,35 +33,35 @@ window.BIB_CONFIG = {
      <b>...</b> hebt hervor.
      --------------------------------------------------------------- */
   rules: [
-    "<b>Kein RDM.</b> Gewalt gegen andere Trooper braucht immer einen Rollenspielgrund.",
-    "<b>Befehlskette einhalten.</b> Anweisungen von Vorgesetzten werden im Dienst ausgeführt.",
-    "<b>Kein Metagaming.</b> Was dein Charakter nicht weiß, weiß dein Charakter nicht.",
+    "<b>Keine Freunde? Kein Problem</b> Hier findest du schnell neue Bekanntschaften unter deinen Brüdern",
+    "<b>Bug oder Fehler gefunden?</b> Bitte melde dich im Discord und melde Fehler",
+    "<b>Hab Spaß</b> :) ",
     "<b>Bleib in der Rolle.</b> OOC-Gespräche gehören in den dafür vorgesehenen Kanal.",
     "<b>Respekt.</b> Beleidigungen, Diskriminierung und Belästigung führen zum Ausschluss.",
-    "<b>Im Zweifel fragen.</b> Das Teamleitung-Team ist über Discord erreichbar."
+    "<b>Im Zweifel fragen.</b> Das Team erreichst du per @"
   ],
 
   /* ---------------------------------------------------------------
      FELDHINWEISE  (rotieren automatisch)
      --------------------------------------------------------------- */
   tips: [
-    "Mit <b>F3</b> öffnest du das Charaktermenü und siehst deinen aktuellen Zug.",
-    "Die <b>Waffenkiste</b> in der Kaserne gibt dir nur die Ausrüstung, die dein Job erlaubt.",
-    "Über das <b>Comlink</b> erreichst du deinen Zugführer, ohne den Nahfunk zu belegen.",
+    "Mit <b>F6</b> kannst du respawnen.",
+    "Die <b>Waffenkiste</b> in der Waffenkammer gibt dir nur die Ausrüstung, die dein Job erlaubt.",
+    "Über das <b>Comlink</b> auf H kannst du funken",
     "Sanitäter behandeln Verletzungen — <b>renn nicht weg</b>, wenn dich einer versorgt.",
-    "Das <b>Squadsystem</b> zeigt deine Truppmitglieder im HUD an. Nutzt es im Einsatz.",
-    "Trainings werden im Discord angekündigt. <b>Wer trainiert, wird befördert.</b>",
-    "Halte deine <b>Rüstung</b> instand — beschädigte Platten schützen schlechter."
+    "Spiele fair und halte dich an Regeln. Es wird sich für dich lohnen!",
+    "Spezeille Ausrüstungen brauchen spezeille Fortbildungen. Frag deinen Vorgesetzten.",
+    "Halte deine <b>Rüstung</b> instand. Sauber in die Schlacht, dreckig wieder raus."
   ],
 
   /* ---------------------------------------------------------------
      AENDERUNGSPROTOKOLL  (die letzten 4-5 Eintraege reichen)
      --------------------------------------------------------------- */
   changelog: [
-    { tag: "NEU",  text: "Combat Engineers als 4. Zug aufgestellt." },
-    { tag: "FIX",  text: "Funkreichweite im Hangar korrigiert." },
-    { tag: "BAL",  text: "Ausrüstungslisten für LIP und HIP überarbeitet." },
-    { tag: "NEU",  text: "Neue Trainingsmap in die Rotation aufgenommen." }
+    { tag: "NEWS",  text: "Captain Rex hat den letzten Banthaburger gegessen" },
+    { tag: "WOW",  text: "Yularen neuer Schachgroßmeister. Yoda ist raus." },
+    { tag: "OLDS",  text: "General Skywalker ist im Urlaub auf Naboo (schon wieder lol)" },
+    { tag: "Iiihh",  text: "Doofschuss hat einen Pickel auf der Nase" }
   ],
 
   /* ---------------------------------------------------------------
@@ -75,17 +75,17 @@ window.BIB_CONFIG = {
     hq: {
       abbr:  "TC",
       name:  "Torrent Company",
-      role:  "Kompanieführung · Befehlsgewalt über alle vier Züge"
+      role:  "Kompanieführung · Befehlsgewalt über alle PLatoons"
     },
 
     platoons: [
       {
-        ord:      "1. Zug",
-        badge:    "LIP",
-        name:     "Light Infantry",
-        full:     "Light Infantry Platoon",
-        color:    "var(--lip)",
-        role:     "Beweglicher Vorstoß, Aufklärung und Sicherung der Flanken. Der erste Zug, der Feindkontakt meldet.",
+        ord:      "1. Platoon",
+        badge:    "1st",
+        name:     "1. Platoon",
+        full:     "First Platoon",
+        color:    "var(--1st)",
+        role:     "Beweglicher Vorstoß, Aufklärung und Sicherung der Flanken. Das erste Platoon, das Feindkontakt meldet.",
         duties:   [
           "Aufklärung und Erstkontakt",
           "Flankensicherung im Vormarsch",
@@ -95,11 +95,11 @@ window.BIB_CONFIG = {
         strength:      "Tempo"
       },
       {
-        ord:      "2. Zug",
-        badge:    "HIP",
-        name:     "Heavy Infantry",
-        full:     "Heavy Infantry Platoon",
-        color:    "var(--hip)",
+        ord:      "2. Platoon",
+        badge:    "2nd",
+        name:     "2. Platoon",
+        full:     "Second Platoon",
+        color:    "var(--2nd)",
         role:     "Massierte Feuerkraft für den Durchbruch befestigter Stellungen und das Halten eroberter Linien.",
         duties:   [
           "Schwere Waffen und Unterdrückungsfeuer",
@@ -110,22 +110,22 @@ window.BIB_CONFIG = {
         strength:      "Durchschlag"
       },
       {
-        ord:      "3. Zug",
+        ord:      "3. Platoon",
         badge:    "MED",
         name:     "Medical",
         full:     "Medical Platoon",
         color:    "var(--med)",
-        role:     "Sanitätsdienst der Kompanie. Versorgt Verwundete im Gefecht und betreibt das Feldlazarett.",
+        role:     "Sanitätsdienst der Kompanie. Versorgt Verwundete im Gefecht und betreibt die Medbay.",
         duties:   [
           "Verwundetenversorgung unter Feuer",
-          "Betrieb des Feldlazaretts",
+          "Betrieb der Medbay",
           "Evakuierung und Nachsorge"
         ],
         strengthLabel: "Schwerpunkt",
         strength:      "Erhalt"
       },
       {
-        ord:      "4. Zug",
+        ord:      "4. Platoon",
         badge:    "CE",
         name:     "Combat Engineers",
         full:     "Combat Engineer Platoon",
